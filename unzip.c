@@ -2,7 +2,7 @@
  * Use minizip to unzip the zip file
  */
 #include "dezip.h"
-#include <minizip/unzip.h>
+#include "minizip/unzip.h"
 
 int main(int argc, const char* argv[])
 {
@@ -76,18 +76,18 @@ void decompress(const char *zfin)
 			printf(" ./%s -> %d\n", szCurrentFile, size);
 			buf = malloc(size);
 			assert(buf != NULL);
-			if (UNZ_OK == unzOpenCurrentFilePassword(unZipDir, NULL))
+			if (UNZ_OK == unzOpenCurrentFile(unZipDir))
 			{
 				nReadBytes = unzReadCurrentFile(unZipDir, buf, size);
 				unzCloseCurrentFile(unZipDir);
+				fout = fopen(szCurrentFile, "wb");
+				assert(fout != NULL);
+				fwrite(buf, size, 1, fout);
+				fclose(fout);
 			}
-			fout = fopen(szCurrentFile, "wb");
-			assert(fout != NULL);
-			fwrite(buf, size, 1, fout);
-			fclose(fout);
 			free(buf);
 		}
 		ret = unzGoToNextFile(unZipDir);
 	}
-	gzclose(unZipDir);
+	unzClose(unZipDir);
 }
