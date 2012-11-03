@@ -4,7 +4,10 @@
 #include <string.h>
 #include <assert.h>
 
-void decompress(const char *zfin);
+char* decompress(const char *zfin);
+
+#define MAX_BUFFER (1024*1024*30)
+
 
 #define MB(x)				(unsigned long)x*1024*1024
 #define MAX_IN_FILE_SIZE	(unsigned long)(MB(50))
