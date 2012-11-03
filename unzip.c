@@ -1,7 +1,7 @@
 /*
  * Use minizip to unzip the zip file
  */
-#include "unzip.h"
+#include "dezip.h"
 #include "minizip/unzip.h"
 #include "minizip/zlib.h"
 

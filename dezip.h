@@ -4,10 +4,6 @@
 #include <string.h>
 #include <assert.h>
 
-/*
- * return 1 if it is a zip file
- */
-int is_zip(FILE * fin);
 void decompress(const char *zfin);
 
 #define MB(x)				(unsigned long)x*1024*1024
