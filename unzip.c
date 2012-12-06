@@ -1,22 +1,52 @@
-/*
- * Use minizip to unzip the zip file
- */
+#include <stdio.h>
+#include <stdlib.h>
 #include "dezip.h"
-#include "minizip/unzip.h"
-#include "minizip/zlib.h"
+#include "zlib/unzip.h"
+#include "zlib/zlib.h"
 
+#define SUFFIX ".gz"
 int main(int argc, const char* argv[])
 {
 	char *name;
 	FILE *fin;
+	char filename[MAX_PATH];
 	if(argc < 2)
 	{
 		printf("Unzip: args is to few\n");
 		return -1;
 	}
-	name = decompress(argv[1]); // extract the zip file
+	strcpy(filename, argv[1]);
+	strcat(filename, SUFFIX);
+	printf("Compressing '%s' ...\n", argv[1]);
+	gzcompress(argv[1], filename);
+	printf("Extracting '%s' ...\n", filename);
+	name = decompress(filename); // extract the zip file
 	if(name) printf("[%s] is decompressed from [%s]\n", name, argv[1]);
 	return 0;
+}
+
+void gzcompress(const char *file, const char * filename)
+{
+	FILE * fin;
+	void * buf;
+	size_t size, temp;
+	
+	gzFile gzfile;
+	fin = fopen(file, "rb");
+	fseek(fin, 0, SEEK_END);
+	size = ftell(fin);
+	printf("Input file size %d\n", size);
+	buf = malloc(size);
+	rewind(fin);
+	fread(buf, 1, size, fin);
+	gzfile = gzopen(filename, "wb");
+	temp = gzwrite(gzfile, buf, size);
+	printf("Write size %d\n", temp);
+	size = gzflush(gzfile, Z_FINISH);
+	if(size != Z_OK)
+		printf("Doomed!\n");
+	free(buf);
+	gzclose(gzfile);
 }
 
 char* decompress(const char *zfin)

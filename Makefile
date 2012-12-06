@@ -1,4 +1,4 @@
-LIBS=`pkg-config --libs minizip`
+LIBS=./zlib/zlib.lib
 CFLAGS=`pkg-config --cflags minizip`
 
 all: unzip
