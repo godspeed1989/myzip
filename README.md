@@ -1,4 +1,8 @@
 myzip
 =====
 
-use minizip to implement my zip
+use zlib to implement:
+
+decompress gz zip file
+compress gz file
+
